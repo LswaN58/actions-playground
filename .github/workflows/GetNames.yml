@@ -1,0 +1,22 @@
+# Workflow to build and deploy designer dashboard to server.
+name: Test Getting Repo/Branch Names
+on:
+  workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
+
+jobs:
+  test_export:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Try to get branch name directly
+      shell: bash
+      run: echo github.ref_name = ${{github.ref_name}}
+    - name: Try to get branch name directly with another environment var.
+      shell: bash
+      run: echo github.base_ref = ${{github.base_ref}}
+    - name: Extract branch name
+      shell: bash
+      run: echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')" >> $GITHUB_ENV
+    - name: Try to get repo name directly
+      shell: bash
+      run: echo github.repository = ${{github.repository}}
