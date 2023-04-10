@@ -3,6 +3,9 @@ name: Test Getting Repo/Branch Names
 on:
   workflow_dispatch: # Allow manual trigger of this workflow from the Actions tab
 
+env:
+  TEST_PATH: ${{ github.event.repository.name }}/${{ github.ref_name }}
+
 jobs:
   test_export:
     runs-on: ubuntu-22.04
@@ -11,18 +14,12 @@ jobs:
     - name: Try to get branch name directly
       shell: bash
       run: echo github.ref_name = ${{github.ref_name}}
-    - name: Try to get branch name directly with another environment var.
-      shell: bash
-      run: echo github.base_ref = ${{github.base_ref}}
-    - name: Extract branch name
-      shell: bash
-      run: echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/} | sed 's/\//_/g')" >> $GITHUB_ENV
     - name: Try to get repo name directly
       shell: bash
       run: echo github.event.repository.name = ${{github.event.repository.name}}
-    - name: Try to get repo name directly another way
-      shell: bash
-      run: echo github.repository.name = ${{github.repository.name}}
     - name: See what we can see of github event repository object
       shell: bash
       run: echo github.repository= ${{github.repository}}
+    - name: Print out path
+      shell: bash
+      run: echo TEST_PATH = ${{ env.TEST_PATH }}
